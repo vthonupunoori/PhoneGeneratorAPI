@@ -5,19 +5,24 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import com.phone.service.PhoneGenerator;
+import com.phone.service.PhoneGeneratorService;
 
 @Service
-public class PhoneGeneratorImpl implements PhoneGenerator {
+public class PhoneGeneratorServiceImpl implements PhoneGeneratorService {
 
 	private Map<Character, String> numToCharMap = new HashMap<>();
 
-	private List<String> phoneNumberString = new ArrayList<>();
+	private List<String> phoneNumberStringList = new ArrayList<>();
 
-	public PhoneGeneratorImpl() {
+	public PhoneGeneratorServiceImpl() {
 		numToCharMap.put('0', "+");
 		numToCharMap.put('1', "1");
 		numToCharMap.put('2', "ABC");
@@ -34,20 +39,20 @@ public class PhoneGeneratorImpl implements PhoneGenerator {
 	@Override
 	public List<String> genereAllPossiblePhoneNumbers(String phoneNumStr) {
 
-		phoneNumberString = new ArrayList<>();
+		phoneNumberStringList = new ArrayList<>();
 
 		if (StringUtils.isEmpty(phoneNumStr)) {
-			return phoneNumberString;
+			return phoneNumberStringList;
 		}
 
 		String phoneNum = phoneNumStr.replaceAll("-", "").replaceAll(" ", "");
 		recursiveSwapping(new StringBuilder(), phoneNum, 0);
-		return phoneNumberString;
+		return phoneNumberStringList;
 	}
 
 	private void recursiveSwapping(StringBuilder sb, String phoneNum, int index) {
 		if (index == phoneNum.length()) {
-			phoneNumberString.add(sb.toString());
+			phoneNumberStringList.add(sb.toString());
 			return;
 		}
 
@@ -57,6 +62,21 @@ public class PhoneGeneratorImpl implements PhoneGenerator {
 			recursiveSwapping(sb, phoneNum, index + 1);
 			sb.setLength(sb.length() - 1);
 		}
+	}
+
+	@Override
+	public Page<String> findBasedOnPageNumber(String phoneNum, int pageNum, int size) {
+		genereAllPossiblePhoneNumbers(phoneNum);
+
+		Pageable pageable = PageRequest.of(pageNum, size, Sort.unsorted());
+
+		long start = pageable.getOffset();
+		long end = (start + pageable.getPageSize()) > phoneNumberStringList.size() ? phoneNumberStringList.size()
+				: (start + pageable.getPageSize());
+		Page<String> pages = new PageImpl<String>(phoneNumberStringList.subList((int)start, (int)end), pageable,
+				phoneNumberStringList.size());
+
+		return pages;
 	}
 
 }

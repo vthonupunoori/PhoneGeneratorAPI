@@ -10,12 +10,12 @@ import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import com.phone.service.impl.PhoneGeneratorImpl;
+import com.phone.service.impl.PhoneGeneratorServiceImpl;
 
 @RunWith(MockitoJUnitRunner.class)
 public class PhoneGeneratorTest {
 
-	PhoneGeneratorImpl phoneGenerator = Mockito.mock(PhoneGeneratorImpl.class);
+	PhoneGeneratorServiceImpl phoneGenerator = Mockito.mock(PhoneGeneratorServiceImpl.class);
 
 	@Test
 	public void genereAllPossiblePhoneNumbersTest() {
