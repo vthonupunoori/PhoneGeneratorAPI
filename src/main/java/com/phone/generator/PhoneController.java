@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.phone.service.PhoneGeneratorService;
 
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "*")
 @RestController
 public class PhoneController {
 
@@ -30,7 +30,7 @@ public class PhoneController {
 	@GetMapping("/pageGenerator/{phnNum}")
 	public Optional<Page<String>> getGeneratedPhoneNumbersPage(@PathVariable("phnNum") String phnNum,
 			@RequestParam("page") int page, @RequestParam("size") int size) {
-
+//		System.out.println("Phone:" + phnNum + ", Page: " + page + ", Size: " + size);
 		return Optional.ofNullable(phoneGenerator.findBasedOnPageNumber(phnNum, page, size));
 
 	}

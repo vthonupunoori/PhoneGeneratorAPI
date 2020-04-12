@@ -13,7 +13,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 import com.phone.service.impl.PhoneGeneratorServiceImpl;
 
 @RunWith(MockitoJUnitRunner.class)
-public class PhoneGeneratorTest {
+public class PhoneGeneratorServiceTest {
 
 	PhoneGeneratorServiceImpl phoneGenerator = Mockito.mock(PhoneGeneratorServiceImpl.class);
 
